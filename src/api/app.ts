@@ -3,7 +3,7 @@ import Fastify, {
   type FastifyServerOptions,
 } from "fastify";
 import type { HealthService } from "../business/health-service.ts";
-import { handleError } from "./error-handler.ts";
+import { handleError, handleNotFound } from "./error-handler.ts";
 import { registerHealthRoutes } from "./health-routes.ts";
 
 export type AppDependencies = {
@@ -17,6 +17,7 @@ export function buildApp(
 ): FastifyInstance {
   const app = Fastify(options);
   app.setErrorHandler(handleError);
+  app.setNotFoundHandler(handleNotFound);
   registerHealthRoutes(app, deps.healthService);
   return app;
 }

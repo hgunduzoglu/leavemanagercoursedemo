@@ -54,4 +54,25 @@ describe("central error handler", () => {
       error: { code: "BAD_REQUEST", message: "İstek geçersiz." },
     });
   });
+
+  it.each([
+    { method: "GET", url: "/api/nope" },
+    { method: "POST", url: "/api/health" },
+  ] as const)(
+    "answers an unmatched route ($method $url) with the error body",
+    async ({ method, url }) => {
+      app = buildApp({
+        healthService: {
+          getSystemHealth: () => ({ status: "ok", database: "reachable" }),
+        },
+      });
+
+      const response = await app.inject({ method, url });
+
+      expect(response.statusCode).toBe(404);
+      expect(response.json()).toEqual({
+        error: { code: "NOT_FOUND", message: "Kaynak bulunamadı." },
+      });
+    },
+  );
 });

@@ -21,3 +21,10 @@ export function handleError(
     error: { code: "INTERNAL_ERROR", message: "Beklenmeyen bir hata oluştu." },
   });
 }
+
+/** An unmatched route never reaches handleError — it gets the same error body here. */
+export function handleNotFound(_request: FastifyRequest, reply: FastifyReply) {
+  return reply.status(404).send({
+    error: { code: "NOT_FOUND", message: "Kaynak bulunamadı." },
+  });
+}
