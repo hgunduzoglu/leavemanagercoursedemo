@@ -1,6 +1,6 @@
 # Spec 0001 — Walking skeleton
 
-- Status: In progress
+- Status: Shipped
 - Mode: lite
 - Plan: `specs/plans/0001-plan.md`
 - Self-critique: done
@@ -67,29 +67,29 @@ giriş/oturum, izin verileri için şema ve seed verisi, üretime dağıtım.
   bölünme önerilmedi.
 
 ## Acceptance criteria
-- [ ] AC-1 — Ana sayfa açıldığında, sağlık sorgusu yanıtlanana kadar "Sistem durumu kontrol ediliyor…" gösterilir.
-- [ ] AC-2 — Sistem ve veritabanı çalışıyorsa ana sayfa "Sistem çalışıyor" ve "Veritabanı: erişilebilir" gösterir.
-- [ ] AC-3 — Sunucu yanıt veriyor ama veritabanına erişilemiyorsa ana sayfa "Sistem sorunlu" ve "Veritabanı: erişilemiyor" gösterir.
-- [ ] AC-4 — Sunucuya ulaşılamıyorsa veya beklenmeyen bir yanıt gelirse (200 ve 503 dışındaki her HTTP durumu, JSON olmayan gövde veya ağ hatası) ana sayfa "Sunucuya ulaşılamadı" gösterir ve ham hata ayrıntısı göstermez.
-- [ ] AC-5 — Veritabanı erişilebilirken sağlık sorgusu, oturum olmadan, HTTP 200 ve sağlıklı sonucunu döner; sonuç gerçek bir veritabanı sorgusuyla belirlenir.
-- [ ] AC-6 — Veritabanı erişilemezken sağlık sorgusu HTTP 503 ve sorunlu sonucunu döner; yanıtta stack trace, SQL hatası veya dosya yolu bulunmaz.
-- [ ] AC-7 — `./scripts/check` tip denetimi, lint, biçim, test ve derleme adımlarını çalıştırıp `CHECK GREEN (full, 5 steps, …)` verir; `./scripts/check --fast` derleme dışındaki dört adımı çalıştırıp yeşil biter.
-- [ ] AC-8 — `docs/architecture.md`'deki beş yasak bağımlılığın her birinin ihlali lint adımını kırmızıya düşürür.
-- [ ] AC-9 — CI, bir push'ta Node 24 ile bağımlılıkları kurup `./scripts/check` full profilini çalıştırır ve yeşil biter.
-- [ ] AC-10 — Temiz bir klonda (repo dışında geçici bir dizin; `npm ci` dahil README'deki tüm adımlar; klon sonra silinir — `docs/testing.md`, Evidence policy 4) uygulama yerelde başlatılır ve ana sayfa tarayıcıda açılır.
+- [x] AC-1 — Ana sayfa açıldığında, sağlık sorgusu yanıtlanana kadar "Sistem durumu kontrol ediliyor…" gösterilir.
+- [x] AC-2 — Sistem ve veritabanı çalışıyorsa ana sayfa "Sistem çalışıyor" ve "Veritabanı: erişilebilir" gösterir.
+- [x] AC-3 — Sunucu yanıt veriyor ama veritabanına erişilemiyorsa ana sayfa "Sistem sorunlu" ve "Veritabanı: erişilemiyor" gösterir.
+- [x] AC-4 — Sunucuya ulaşılamıyorsa veya beklenmeyen bir yanıt gelirse (200 ve 503 dışındaki her HTTP durumu, JSON olmayan gövde veya ağ hatası) ana sayfa "Sunucuya ulaşılamadı" gösterir ve ham hata ayrıntısı göstermez.
+- [x] AC-5 — Veritabanı erişilebilirken sağlık sorgusu, oturum olmadan, HTTP 200 ve sağlıklı sonucunu döner; sonuç gerçek bir veritabanı sorgusuyla belirlenir.
+- [x] AC-6 — Veritabanı erişilemezken sağlık sorgusu HTTP 503 ve sorunlu sonucunu döner; yanıtta stack trace, SQL hatası veya dosya yolu bulunmaz.
+- [x] AC-7 — `./scripts/check` tip denetimi, lint, biçim, test ve derleme adımlarını çalıştırıp `CHECK GREEN (full, 5 steps, …)` verir; `./scripts/check --fast` derleme dışındaki dört adımı çalıştırıp yeşil biter.
+- [x] AC-8 — `docs/architecture.md`'deki beş yasak bağımlılığın her birinin ihlali lint adımını kırmızıya düşürür.
+- [x] AC-9 — CI, bir push'ta Node 24 ile bağımlılıkları kurup `./scripts/check` full profilini çalıştırır ve yeşil biter.
+- [x] AC-10 — Temiz bir klonda (repo dışında geçici bir dizin; `npm ci` dahil README'deki tüm adımlar; klon sonra silinir — `docs/testing.md`, Evidence policy 4) uygulama yerelde başlatılır ve ana sayfa tarayıcıda açılır.
 
 ## Definition of Done
-- [ ] Every acceptance criterion mapped to proof (test or reproducible observation)
-- [ ] `scripts/check` green
-- [ ] Independent review done; real findings fixed, noise rejected with written rationale, deferred ones in `specs/backlog.md`
-- [ ] Docs / ADRs updated if behavior or architecture changed — burada: stack ADR'ı ve n-katmanlı mimari ADR'ı (`docs/decisions/`); `docs/conventions.md` "Enforced by tooling" artık "planlandı" değil
-- [ ] Spec moved to `specs/done/` (it becomes immutable there)
+- [x] Every acceptance criterion mapped to proof (test or reproducible observation)
+- [x] `scripts/check` green
+- [x] Independent review done; real findings fixed, noise rejected with written rationale, deferred ones in `specs/backlog.md`
+- [x] Docs / ADRs updated if behavior or architecture changed — burada: stack ADR'ı ve n-katmanlı mimari ADR'ı (`docs/decisions/`); `docs/conventions.md` "Enforced by tooling" artık "planlandı" değil
+- [x] Spec moved to `specs/done/` (it becomes immutable there)
 
 ## Scorecard (fill at ship — honest numbers make the process improvable)
 | Metric | Value |
 |---|---|
-| Spec revisions | |
-| Fix rounds | |
-| Review findings: real / noise / deferred | |
-| Regressions introduced | |
-| Bugs escaped to production | |
+| Spec revisions | 0 (self-critique onaydan önce katıldı) |
+| Fix rounds | 1 |
+| Review findings: real / noise / deferred | 3 / 0 / 0 (review round 1) · VERIFY: 1 / 2 / 0 |
+| Regressions introduced | 0 |
+| Bugs escaped to production | 0 (henüz dağıtım yok) |
