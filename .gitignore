@@ -19,6 +19,7 @@ coverage/
 
 # Local SQLite databases (tests use :memory:; dev data never enters the repo)
 *.sqlite
+*.sqlite-*
 *.db
 
 # Claude Code personal settings (shared settings.json IS committed after init)

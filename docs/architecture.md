@@ -8,8 +8,8 @@ React SPA (`web`) sunucuyla yalnızca `/api` altındaki HTTP/JSON üzerinden kon
 `api` → `business` → `data` katmanları yukarıdan aşağıya çağrılır; `shared` katmanlar arasında taşınan
 tipleri tutar. Tek bir npm paketi ve tek bir SQLite veritabanı (`node:sqlite`) vardır. Gerekçe: bu
 kapsamda servis ayırmak yalnızca maliyet getirir; klasik katmanlar kurs izleyicisi için tanıdıktır ve
-katman sınırları lint ile zorlanır. Stack ve mimari seçiminin ADR'ı walking skeleton'da yazılır
-(`docs/decisions/`).
+katman sınırları lint ile zorlanır. Kararlar: ADR 0001 (stack) ve ADR 0002 (n-katmanlı mimari),
+`docs/decisions/`.
 
 ## Modules / components and ownership
 
@@ -32,8 +32,9 @@ burada izin verilir.
   katmanı çağırır. Event bus, kuyruk veya arka plan işi yoktur.
 - `web` ↔ sunucu: yalnızca `/api` altındaki HTTP/JSON. Sözleşme tipleri `src/shared` içindedir.
 - Sunucu, iş kurallarının **tek otoritesidir**. UI'daki bir kontrol, sunucudaki kontrolün yerine geçmez.
-- Geliştirme ortamında SPA'nın nasıl sunulacağı (Vite dev server + `/api` proxy) ve üretim derlemesinin
-  nasıl servis edileceği walking skeleton'da kararlaştırılır.
+- Geliştirmede SPA'yı Vite dev server sunar ve `/api` isteklerini Fastify sunucusuna yönlendirir
+  (`vite.config.ts`, `src/server.ts` ile aynı `HOST`/`PORT`). Üretim derlemesi (`dist/`) `check`'te
+  doğrulanır; bir sunucudan servis edilmesi ve dağıtım kapsam dışıdır (spec 0001).
 
 ## Forbidden dependencies (make them testable)
 `scripts/check`'in lint adımında, klasör başına ESLint `no-restricted-imports` kurallarıyla zorlanır

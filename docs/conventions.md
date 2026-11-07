@@ -21,8 +21,9 @@
   satırıyla ana sürümün 24 olduğunu doğrular.
 - **TypeScript 5.x**, `strict: true`, ES modülleri.
 - **Fastify 5** (API) · **React 19** + **Vite** (SPA) · **SQLite** Node'un yerleşik `node:sqlite` modülüyle.
-- **Vitest** + React Testing Library + jsdom · **ESLint 9** (flat config) · **Prettier**.
-- Tam sürümler walking skeleton'da güncel kararlı sürümlere sabitlenir; `package-lock.json` commit'lenir.
+- **Vitest** + React Testing Library + jsdom · **ESLint 10** (flat config) · **Prettier**.
+- Tam sürümler `package.json`'da `--save-exact` ile sabittir; `package-lock.json` commit'lenir. Gerekçe ve
+  sürüm notları: ADR 0001 (`docs/decisions/0001-stack-node-typescript.md`).
 
 ## Naming
 
@@ -70,16 +71,20 @@
 - `new Date("2026-11-07").getDay()` UTC gece yarısı olarak ayrıştırır, yerel saatle gün kayar — hafta gününü `getUTCDay()` ile veya tarih metninden saf aritmetikle hesapla — from bootstrap 2026-11-07
 - SQLite'ta foreign key'ler varsayılan olarak kapalıdır — her bağlantıda `PRAGMA foreign_keys = ON` (`data` katmanındaki bağlantı fabrikası) — from bootstrap 2026-11-07
 - `node:sqlite` Node 24'te deneysel: `ExperimentalWarning` basar, API değişebilir — yalnızca `data` katmanında kullan, uyarıyı global olarak susturma — from bootstrap 2026-11-07
-- `vitest` (`run` olmadan) terminalde izleme moduna girer ve kapanmaz — `check` ve npm script'lerinde her zaman `vitest run` — from bootstrap 2026-11-07
+- Fastify'da eşleşmeyen route `setErrorHandler`'a uğramaz, kendi gövdesini döner — `setNotFoundHandler` ile aynı `{ error: { code, message } }` gövdesini ver — from 0001 review F-1 (A-1)
+- `process.env.X ?? varsayılan` boş string'i (`PORT=`) değer sayar — ortam değişkenlerinde varsayılan için `||` kullan — from 0001 review F-2 (A-2)
 - `fastify.inject()` testlerinde uygulama kapatılmazsa veritabanı/hook tanıtıcıları açık kalır — her testin sonunda `await app.close()` — from bootstrap 2026-11-07
 - Windows `cmd` altında `TZ=UTC vitest run` gibi npm script'leri çalışmaz — `TZ` ve locale'i `vitest.config.ts` içinde sabitle — from bootstrap 2026-11-07
 
 ## Enforced by tooling
 <!-- List what the compiler/linter/analyzers already enforce, so review doesn't re-litigate it.
 Wire new rules into `scripts/check` whenever possible — prose is advice, tooling is law. -->
-Planlandı; walking skeleton `scripts/check.conf` adımlarıyla birlikte etkinleştirir:
-- `tsc --noEmit` — `strict: true` tip denetimi.
+Etkin (spec 0001); hepsi `scripts/check`'te:
+- `tsc --noEmit` — `strict: true` tip denetimi; göreli importlarda `.ts` uzantısı ve yalnızca silinebilir
+  TS sözdizimi (`allowImportingTsExtensions`, `erasableSyntaxOnly` — sunucu TS'yi Node ile doğrudan çalıştırır).
+- Vitest izleme moduna hiç girmez: `vitest.config.ts`'te `watch: false` (eski tuzak: `run`'sız `vitest`
+  kapanmayan izleme modu açardı).
 - ESLint — `@typescript-eslint/no-explicit-any` (hata); katman kuralları (`docs/architecture.md`,
   Forbidden dependencies) `no-restricted-imports` ile; `dangerouslySetInnerHTML` yasağı
-  `no-restricted-syntax` ile.
-- Prettier `--check` — biçimlendirme.
+  `no-restricted-syntax` ile. Kuralların her biri `src/layer-rules.test.ts`'te kanıtlanır.
+- Prettier `--check` — biçimlendirme (kod ve yapılandırma; Markdown `.prettierignore` ile dışarıda).

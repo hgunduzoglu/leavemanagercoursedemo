@@ -1,0 +1,40 @@
+{
+  "name": "leave-manager",
+  "version": "0.1.0",
+  "private": true,
+  "description": "İzin Yöneticisi — ANEW kurs demosu",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev:server": "node --env-file-if-exists=.env --watch src/server.ts",
+    "dev:web": "vite",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --check .",
+    "test": "vitest run",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "fastify": "5.12.8",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "eslint": "10.14.0",
+    "jsdom": "31.0.0",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
+  }
+}
