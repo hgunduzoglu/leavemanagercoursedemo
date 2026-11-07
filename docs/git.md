@@ -1,6 +1,7 @@
 # Git
 
-> **Template — adjust at bootstrap.** Defaults below are safe; loosen consciously, not accidentally.
+> Bootstrap 2026-11-07'de karara bağlandı: şablon varsayılanları korundu, tek kişilik çalışma için
+> uyarlandı (Pull requests). Defaults below are safe; loosen consciously, not accidentally.
 
 ## Branching
 - `feature/<spec-no>-<short-name>` — **no branch without a spec.** Also for CHANGE-lane mini-specs.
@@ -33,10 +34,14 @@
 ## Trivial changes
 <!-- Set at bootstrap. Applies only to requests the change-request triage rubric
      (workflows/change-request.md) classifies as TRIVIAL: no acceptance criterion changes, no shared code. -->
-- Policy: **(1) PR + one reviewer, no spec** — default; alternatives: (2) direct commit allowed on a
-  `trivial/<short-name>` branch · (3) everything goes through a mini-spec (`specs/TEMPLATE-mini.md`;
-  no ANALYZE here: run the self-critique pass of `prompts/spec.md`, then `Self-critique: done`).
+- Policy: **(1) PR + one reviewer, no spec** — bootstrap 2026-11-07'de seçildi. `trivial/<short-name>`
+  branch'i, PR, bağımsız review; "reviewer" tanımı için aşağıda Pull requests.
 - Always: one narrow commit, `scripts/check` green. A second file or a new test means re-triage.
 
 ## Pull requests
 - PR template checklist completed; `scripts/check` green in CI; squash-merge.
+- **Tek kişilik çalışma:** "bir reviewer" = bağımsız review (salt okunur reviewer subagent'ı veya ayrı
+  oturum, `docs/roles/reviewer.md`) + PR'a son bakışı yapıp merge eden insan. GitHub kendi PR'ını
+  onaylamaya izin vermediği için onay şartı yerine: CI yeşil ve merge'ü insan yapar.
+- **Önerilen GitHub ayarı (insan yapar):** `main` için branch protection — PR zorunlu, `doctor` ve `check`
+  job'ları zorunlu durum kontrolü, force push kapalı. CI zaten `./scripts/doctor --strict` çalıştırır.
