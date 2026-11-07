@@ -4,10 +4,11 @@ import { openDatabase } from "./data/database.ts";
 import { createHealthRepository } from "./data/health-repository.ts";
 
 // Composition root (docs/architecture.md): the one place that wires the layers together.
-// Settings come from the environment; .env.example lists them with their defaults.
-const port = Number(process.env.PORT ?? 3000);
-const host = process.env.HOST ?? "127.0.0.1";
-const databasePath = process.env.DATABASE_PATH ?? "leave-manager.sqlite";
+// Settings come from the environment; .env.example lists them with their defaults. An empty value
+// (`PORT=`) means "use the default", as in vite.config.ts — hence `||`, not `??`.
+const port = Number(process.env.PORT || "3000");
+const host = process.env.HOST || "127.0.0.1";
+const databasePath = process.env.DATABASE_PATH || "leave-manager.sqlite";
 
 const db = openDatabase(databasePath);
 const app = buildApp(

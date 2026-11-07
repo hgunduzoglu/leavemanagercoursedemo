@@ -72,6 +72,7 @@
 - SQLite'ta foreign key'ler varsayılan olarak kapalıdır — her bağlantıda `PRAGMA foreign_keys = ON` (`data` katmanındaki bağlantı fabrikası) — from bootstrap 2026-11-07
 - `node:sqlite` Node 24'te deneysel: `ExperimentalWarning` basar, API değişebilir — yalnızca `data` katmanında kullan, uyarıyı global olarak susturma — from bootstrap 2026-11-07
 - Fastify'da eşleşmeyen route `setErrorHandler`'a uğramaz, kendi gövdesini döner — `setNotFoundHandler` ile aynı `{ error: { code, message } }` gövdesini ver — from 0001 review F-1 (A-1)
+- `process.env.X ?? varsayılan` boş string'i (`PORT=`) değer sayar — ortam değişkenlerinde varsayılan için `||` kullan — from 0001 review F-2 (A-2)
 - `fastify.inject()` testlerinde uygulama kapatılmazsa veritabanı/hook tanıtıcıları açık kalır — her testin sonunda `await app.close()` — from bootstrap 2026-11-07
 - Windows `cmd` altında `TZ=UTC vitest run` gibi npm script'leri çalışmaz — `TZ` ve locale'i `vitest.config.ts` içinde sabitle — from bootstrap 2026-11-07
 
