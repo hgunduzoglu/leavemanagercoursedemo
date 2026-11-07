@@ -1,6 +1,7 @@
 # Testing
 
-> **Template — filled during bootstrap.**
+> Bootstrap 2026-11-07'de karara bağlandı (proje kararları: "Frameworks & layout", "What must be
+> tested"). Diğer bölümler ANEW'in ortak test kurallarıdır.
 
 ## The contract
 - Every acceptance criterion maps to at least one test (criterion ↔ test map lives in the plan).
@@ -8,11 +9,42 @@
 - The whole suite runs inside `scripts/check` — one command, everywhere.
 
 ## Frameworks & layout
-<!-- Test framework(s), where tests live, naming pattern. -->
+- **Koşucu:** Vitest (birim, entegrasyon, bileşen — hepsi). Her zaman `vitest run`; izleme modu `check`'e girmez.
+- **Bileşen testleri:** React Testing Library + jsdom; `fetch` stub'lanır.
+- **Yerleşim ve adlandırma:** testler kodun yanında, `*.test.ts` / `*.test.tsx`.
+
+| Katman | Neyi kanıtlar | Nasıl |
+|---|---|---|
+| Birim | İş günü ve bakiye hesabı, durum geçişleri (BR-1…BR-10) | `src/business` saf fonksiyonları; saat sabit |
+| Entegrasyon | Use case'ler + yetkilendirme; API sözleşmesi ve hata kodları | Her testte yeni bellek içi SQLite (`:memory:`); API testleri `fastify.inject()` ile — **port açılmaz**; her testin sonunda `await app.close()` |
+| Bileşen | UI kriterleri: boş, yükleniyor, hata, başarılı, yetkisiz durumları | RTL + jsdom |
+| e2e | — | **Yok** (aşağıda, What must be tested) |
+
+- **Determinizm:** "bugün" dışarıdan verilen saatten gelir (`docs/architecture.md`, composition root);
+  testlerde sabit bir tarih kullanılır. `TZ` ve locale (`tr-TR`) `vitest.config.ts` içinde sabitlenir
+  (npm script satırında değil — `docs/conventions.md`, Known traps). Uygulamada animasyon/geçiş yoktur;
+  domain'de rastgelelik yoktur; üçüncü parti servis yoktur.
+- **Veri hijyeni (Resource hygiene 5):** her test kendi bellek içi veritabanını açar; bir çalıştırmanın
+  verisi bir sonrakine geçmez.
+- **Profiller (Two speeds):** başlangıçta tüm test adımları `[fast]`; full'a özel adım üretim derlemesidir
+  (`vite build`). Bir adım ölçümde (3 çalıştırmanın medyanı) ~1 dakikayı aşarsa **seçiciyle** bölünür:
+  `*.int.test.ts` deseni fast'ten hariç tutulur, full'da aynı desen dahil edilir.
+- **UI ekran görüntüsü kanıtı:** VERIFY oturumu Playwright (Chromium, headless) ile, repo ve `check` dışında
+  geçici bir dizinde alır (Evidence for UI criteria). Playwright projeye bağımlılık olarak eklenmez.
 
 ## What must be tested
-<!-- e.g. every business rule (BR-n), every boundary/forbidden dependency; the e2e journeys and
-     budget, if the project has e2e at all (Test layers). -->
+- **Her iş kuralı (BR-n)** en az bir testle; sınır değerleriyle birlikte: tamamı hafta sonuna düşen aralık
+  (BR-2), başlangıç = bugün (BR-3), yıl sınırı (BR-4), bakiyenin süreye tam eşit olması (BR-5), uç uca
+  bitişik ama çakışmayan talepler (BR-6).
+- **Hassas alan — Yetkilendirme:** her yetki kuralı (BR-7, BR-9) hem `business` katmanında hem API
+  katmanında (`inject()`) test edilir; 401 / 403 / 404 ayrı ayrı. Her kriter bir kez bilerek bozularak
+  kırmızıda görülür (`prompts/verify.md`).
+- **Eşzamanlılık (BR-5, BR-6):** bakiye/çakışma kontrolü ile yazmanın tek transaction'da olduğu test edilir.
+- **Katman kuralları** (`docs/architecture.md`, Forbidden dependencies) lint ile zorlanır; ayrıca mimari
+  testi yazılmaz.
+- **e2e: yok — bütçe 0 yolculuk, 0 dakika.** Tüm kriterler alt katmanlarda kanıtlanabilir. Bir yolculuk
+  gerçekten tarayıcı gerektirirse ADR ile eklenir (yolculuk, bütçe, araç, app-under-test yaşam döngüsü).
+- **Coverage eşiği yok.** Kanıt, plandaki kriter ↔ test eşlemesidir; coverage raporu repoya girmez.
 
 ## Test layers
 1. **The cheapest test that proves the criterion.** Unit first, then component or integration
