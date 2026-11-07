@@ -1,0 +1,10 @@
+# Prettier checks code and configuration only; ANEW documents keep their own formatting.
+*.md
+.anew-dev/
+.agents/
+.claude/
+.github/
+adapters/
+package-lock.json
+dist/
+coverage/
