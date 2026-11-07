@@ -10,7 +10,9 @@
 
 ## Frameworks & layout
 - **Koşucu:** Vitest (birim, entegrasyon, bileşen — hepsi). Her zaman `vitest run`; izleme modu `check`'e girmez.
-- **Bileşen testleri:** React Testing Library + jsdom; `fetch` stub'lanır.
+- **Bileşen testleri:** React Testing Library + jsdom; `fetch` stub'lanır. Dosyanın ilk satırı
+  `// @vitest-environment jsdom` (varsayılan ortam `node`); Vitest globals kapalı olduğu için RTL `cleanup()`
+  `afterEach`'te çağrılır.
 - **Yerleşim ve adlandırma:** testler kodun yanında, `*.test.ts` / `*.test.tsx`.
 
 | Katman | Neyi kanıtlar | Nasıl |
@@ -20,8 +22,12 @@
 | Bileşen | UI kriterleri: boş, yükleniyor, hata, başarılı, yetkisiz durumları | RTL + jsdom |
 | e2e | — | **Yok** (aşağıda, What must be tested) |
 
+- **API testleri** katman kuralı gereği `data`'yı import edemez: servisin yerine elle yazılmış küçük bir nesne
+  geçer (mock kütüphanesi yok). Gerçek veritabanı yolunu iş katmanı testleri kanıtlar (ADR 0002).
+
 - **Determinizm:** "bugün" dışarıdan verilen saatten gelir (`docs/architecture.md`, composition root);
-  testlerde sabit bir tarih kullanılır. `TZ` ve locale (`tr-TR`) `vitest.config.ts` içinde sabitlenir
+  testlerde sabit bir tarih kullanılır. `TZ=UTC` ve locale `tr_TR.UTF-8`, worker'lar başlamadan
+  `vitest.config.ts` içinde sabitlenir
   (npm script satırında değil — `docs/conventions.md`, Known traps). Uygulamada animasyon/geçiş yoktur;
   domain'de rastgelelik yoktur; üçüncü parti servis yoktur.
 - **Veri hijyeni (Resource hygiene 5):** her test kendi bellek içi veritabanını açar; bir çalıştırmanın

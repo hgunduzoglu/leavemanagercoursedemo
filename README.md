@@ -1,3 +1,28 @@
+# İzin Yöneticisi (Leave Manager)
+
+Çalışanların yıllık izin talep ettiği, yöneticilerin onayladığı/reddettiği küçük bir web uygulaması:
+aşağıda tanıtılan ANEW sürecini uçtan uca gösteren bir kurs demosu. Proje kuralları: [AGENTS.md](AGENTS.md).
+
+## Başlarken
+
+Gereken: Node.js 24 LTS (`node --version` → `v24.x`). Komutlar Windows'ta Git Bash'te de çalışır.
+
+```bash
+npm ci               # bağımlılıkları kilit dosyasından kurar
+npm run dev:server   # 1. terminal: API → http://127.0.0.1:3000 (dosya değişince yeniden başlar)
+npm run dev:web      # 2. terminal: arayüz → http://localhost:5173
+```
+
+Tarayıcıda http://localhost:5173 adresini açın: ana sayfa sistemin ve veritabanının durumunu gösterir.
+Her iki sunucuyu da `Ctrl+C` ile durdurun.
+
+- **Ayarlar** isteğe bağlıdır; hepsinin varsayılanı var. Değiştirmek için `.env.example` dosyasını `.env`
+  olarak kopyalayın (`PORT`, `HOST`, `DATABASE_PATH`).
+- **Veritabanı** varsayılan olarak proje kökündeki `leave-manager.sqlite` dosyasıdır; git'e girmez.
+- **Doğrulama:** `./scripts/check` (full, tek kanıt) · `./scripts/check --fast` (iç döngü).
+
+---
+
 # ANEW — AI Native Engineering Workspace
 
 **A general-purpose, technology-agnostic bootstrap for building software with AI — under control.**
