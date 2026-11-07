@@ -61,11 +61,21 @@ describe("HealthStatus", () => {
 
   it.each([
     {
-      reason: "a 500 status",
+      reason: "a 500 status with a raw text body",
       answer: async () =>
         new Response("SQLITE_BUSY at C:\\data\\leave-manager.sqlite", {
           status: 500,
         }),
+    },
+    {
+      reason: "a 2xx status other than 200 with a healthy body",
+      answer: async () =>
+        jsonResponse(201, { status: "ok", database: "reachable" }),
+    },
+    {
+      reason: "a 5xx status other than 503 with a degraded body",
+      answer: async () =>
+        jsonResponse(500, { status: "degraded", database: "unreachable" }),
     },
     {
       reason: "a non-JSON body",
